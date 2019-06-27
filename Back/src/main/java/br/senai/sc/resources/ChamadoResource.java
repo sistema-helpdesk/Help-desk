@@ -16,7 +16,7 @@ import br.senai.sc.domain.Chamado;
 import br.senai.sc.services.ChamadoService;
 
 @RestController
-@RequestMapping(value = "/Chamadoes")
+@RequestMapping(value = "/chamados")
 public class ChamadoResource {
 	@Autowired
 	private ChamadoService service;
