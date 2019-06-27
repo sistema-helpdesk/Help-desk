@@ -32,7 +32,7 @@ public class Setor implements Serializable {
 		this.id = id;
 		this.nome = nome;
 		this.erro1 = erro1;
-		this.erro2 = erro1;
+		this.erro2 = erro2;
 		this.responsavel = responsavel;
 	}
 
