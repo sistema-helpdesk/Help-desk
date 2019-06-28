@@ -8,7 +8,7 @@ export default class MainTabela extends Component {
         <div className='row'>
           <div className='col-sm-1'></div>
           <div className='col-sm-10 alinhandoEsquerda z-depth-3'>
-            <Tabela ></Tabela>
+            <Tabela></Tabela>
           </div>
           <div className='col-sm-1'></div>
         </div>

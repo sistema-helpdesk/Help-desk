@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import { MDBTable, MDBTableHead, MDBTableBody, MDBCollapse, MDBBtn } from 'mdbreact';
 import Chamado from '../chamado/Chamado';
+import axios from 'axios';
 
 
 //Transformar em classe
@@ -11,17 +12,6 @@ export default class Tabela extends Component {
       collapseID: false,
     }
   }
-  // let collapseID = false,
-  // function toggleCollapse() {
-  //   let colapsado = ''
-  //   if (props.collapseID === false) {
-  //     colapsado = true
-  //   } else {
-  //     colapsado = false
-  //   }
-  //   this.setState({ collapseID: colapsado })
-  //   console.log(props.collapseID)
-  // }
 
   toggleCollapse() {
     let colapsado = ''
