@@ -8,9 +8,11 @@ export default class Main extends Component {
     this.state = {
       listaEmpresa: [],
       listaSetores: [],
-      listaErro: [],
-      empresaSlc: 'SENAI',
+      listaErrosExibida: [],
+      empresaSlcNome: 'SENAI',
       setorSlc: 'Tecnologia',
+      erro1: null,
+      erro2:null
     }
   }
   componentDidMount() {
@@ -54,6 +56,10 @@ export default class Main extends Component {
       })
   }
 
+  criarListaErros(e){
+    this.setState({ setorSlc: e.target.value, erro1:'blah', erro2:'show' })
+  }
+
   render() {
     return (
       <div className='container containerBorda' style={{ marginTop: 60, marginBottom: 60 }}>
@@ -65,19 +71,26 @@ export default class Main extends Component {
                 <option key={empresa.id} >{empresa.nome}</option>
               )}
             </select>
-            <select className="browser-default custom-select" style={{ marginTop: 20 }} onChange={(event => this.setState({ setorSlc: event.target.value }) + console.log(this.state.setorSlc))}>
+            <select className="browser-default custom-select" style={{ marginTop: 20 }} onChange={(event => this.criarListaErros(event) + console.log(this.state.setorSlc))}>
               {this.state.listaSetores.map(setores =>
-                <option key={setores.id}>{setores.nome}</option>
+                <option key={setores.id} value={setores.id}>{setores.nome}</option>
               )}
             </select>
             <select className="browser-default custom-select" style={{ marginTop: 20 }}>
-              {this.state.listaSetores.map(setores =>
-                  <option key={setores.id}>{setores.erro1}</option>
-              )}
-              {this.state.listaSetores.map(setores =>
-                  <option key={setores.id}>{setores.erro2}</option>
-              )}
+              {/* {this.state.listaSetores.map(setores =>
+                <option key={setores.id}>{setores.erro1}</option>
+              )} */}
+              <option>{this.state.erro1}</option>
+              <option>{this.state.erro2}</option>
             </select>
+            {/* {this.state.listaSetores.map(tarefa =>
+              <li key={tarefa.id}>
+                <span className={`m-l-xs ${tarefa.id ? 'todo-completed' : ''}`}> {tarefa.nome} <select>
+                  <option>{tarefa.erro1}</option><option>{tarefa.erro2}</option>
+                  </select>
+                  <button>Salvar</button> </span>
+              </li> */}
+            {/* )} */}
             <MDBInput type="textarea" label="Descrição" rows="5" />
           </div>
           <div className='col-sm-1'></div>
