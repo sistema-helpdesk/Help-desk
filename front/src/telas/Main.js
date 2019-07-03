@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBInput } from 'mdbreact';
+import { MDBInput, MDBBtn } from 'mdbreact';
 import axios from 'axios';
 
 export default class Main extends Component {
@@ -11,8 +11,10 @@ export default class Main extends Component {
       listaErrosExibida: [],
       empresaSlcNome: 'SENAI',
       setorSlc: 'Tecnologia',
+      erro: '',
       erro1: null,
-      erro2:null
+      erro2: null,
+      descricao: null
     }
   }
   componentDidMount() {
@@ -56,8 +58,52 @@ export default class Main extends Component {
       })
   }
 
-  criarListaErros(e){
-    this.setState({ setorSlc: e.target.value, erro1:'blah', erro2:'show' })
+  chamadoPost() {
+    // let emprezin = [
+    //   '{"id":1}'
+    // ]
+    if (!this.state.descricao) {
+      this.setState({ erro: "Preencha nome da turma para continuar!" });
+    } else {
+      axios.post('http://localhost:8080/chamados', {
+        id: null,
+        erro: null,
+        descricao: this.state.descricao,
+        status: 'Em andamento',
+        solucao: null,
+        // empresa: 1,
+      }).then(resposta => {
+        //se deu certo:
+        alert('Cadastrado com sucesso!');
+        window.location.reload();
+      }).catch(resposta => {
+        //se der errado
+        alert('Dados incorretos!');
+      })
+    }
+  }
+
+  criarListaErros(e) {
+    let setorid = e.target.value;
+    let errin1 = null;
+    let errin2 = null;
+    if (setorid == 1) {
+      errin1 = 'Erro no cadastro de novos funcionários'
+      errin2 = 'Erro na expedição de folha de pagamento'
+    } else if (setorid == 2) {
+      errin1 = 'Sistema não abre'
+      errin2 = 'Sistema não se conecta à base de dados'
+    } else if (setorid == 3) {
+      errin1 = 'A página de pedidos está incompleta'
+      errin2 = 'Os pedidos realizados não estão chegando ao setor de compras'
+    } else if (setorid == 4) {
+      errin1 = 'Não está sendo possível atualizar a página de um produto'
+      errin2 = 'A opção de pagamento com cartão não está funcionando'
+    } else if (setorid == 5) {
+      errin1 = 'Não está sendo possível remover um produto da base de dados'
+      errin2 = 'Há produtos duplicados na listagem'
+    }
+    this.setState({ setorSlc: e.target.value, erro1: errin1, erro2: errin2 })
   }
 
   render() {
@@ -67,11 +113,13 @@ export default class Main extends Component {
           <div className='col-sm-1'></div>
           <div className='col-sm-10 alinhandoEsquerda z-depth-3'>
             <select className="browser-default custom-select" style={{ marginTop: 20 }} onChange={(event => this.setState({ empresaSlc: event.target.value }) + console.log(this.state.empresaSlc))}>{/* React select no futuro */}
+              <option selected disabled>Empresas</option>
               {this.state.listaEmpresa.map(empresa =>
                 <option key={empresa.id} >{empresa.nome}</option>
               )}
             </select>
-            <select className="browser-default custom-select" style={{ marginTop: 20 }} onChange={(event => this.criarListaErros(event) + console.log(this.state.setorSlc))}>
+            <select className="browser-default custom-select" style={{ marginTop: 20 }} onChange={(event => this.criarListaErros(event))}>{/* + console.log(this.state.setorSlc) */}
+              <option selected disabled>Setores</option>
               {this.state.listaSetores.map(setores =>
                 <option key={setores.id} value={setores.id}>{setores.nome}</option>
               )}
@@ -91,7 +139,9 @@ export default class Main extends Component {
                   <button>Salvar</button> </span>
               </li> */}
             {/* )} */}
-            <MDBInput type="textarea" label="Descrição" rows="5" />
+            <MDBInput type="textarea" label="Descrição" rows="5" onChange={(event => this.setState({ descricao: event.target.value }))} />
+
+            <MDBBtn color="primary" onClick={() => this.chamadoPost()}>Salvar</MDBBtn>
           </div>
           <div className='col-sm-1'></div>
         </div>

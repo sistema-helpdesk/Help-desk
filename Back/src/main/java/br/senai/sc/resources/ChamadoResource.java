@@ -49,7 +49,7 @@ public class ChamadoResource {
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@RequestBody Chamado obj, @PathVariable Integer id) {
 		obj.setId(id);
-		obj = service.update(obj);
+		service.update(obj);
 		return ResponseEntity.noContent().build();
 	}
 
