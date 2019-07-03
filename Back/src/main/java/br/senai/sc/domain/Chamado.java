@@ -22,7 +22,10 @@ public class Chamado  implements Serializable {
 	private String descricao;
 	private String status;
 	private String solucao;
-	
+	private String nEmpresa;
+	private String nSetor;
+
+//	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
 	private Empresa empresa;
@@ -32,16 +35,37 @@ public class Chamado  implements Serializable {
 	private Setor setor;
 
 	public Chamado() {
+		
 	}
-
-	public Chamado(Integer id, String erro, String descricao, String status, String solucao, Empresa empresa, Setor setor) {
+	
+	public Chamado(Integer id, String erro, String descricao, String status, String solucao, String nEmpresa,
+			String nSetor, Empresa empresa, Setor setor) {
+		super();
 		this.id = id;
 		this.erro = erro;
 		this.descricao = descricao;
 		this.status = status;
 		this.solucao = solucao;
+		this.nEmpresa = nEmpresa;
+		this.nSetor = nSetor;
 		this.empresa = empresa;
 		this.setor = setor;
+	}
+
+	public String getnEmpresa() {
+		return nEmpresa;
+	}
+
+	public void setnEmpresa(String nEmpresa) {
+		this.nEmpresa = nEmpresa;
+	}
+
+	public String getnSetor() {
+		return nSetor;
+	}
+
+	public void setnSetor(String nSetor) {
+		this.nSetor = nSetor;
 	}
 
 	public Integer getId() {

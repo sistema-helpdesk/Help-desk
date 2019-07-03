@@ -9,12 +9,13 @@ export default class Main extends Component {
       listaEmpresa: [],
       listaSetores: [],
       listaErrosExibida: [],
-      empresaSlcNome: 'SENAI',
+      empresaSlcNome: '',
       setorSlc: 'Tecnologia',
       erro: '',
-      erro1: null,
-      erro2: null,
-      descricao: null
+      erro1: '',
+      erro2: '',
+      descricao: '',
+      setorSlcNome: '',
     }
   }
   componentDidMount() {
@@ -71,7 +72,8 @@ export default class Main extends Component {
         descricao: this.state.descricao,
         status: 'Em andamento',
         solucao: null,
-        // empresa: 1,
+        nEmpresa: this.state.empresaSlcNome,
+        nSetor: this.state.setorSlcNome
       }).then(resposta => {
         //se deu certo:
         alert('Cadastrado com sucesso!');
@@ -84,26 +86,26 @@ export default class Main extends Component {
   }
 
   criarListaErros(e) {
-    let setorid = e.target.value;
+    let setornome = e.target.value;
     let errin1 = null;
     let errin2 = null;
-    if (setorid == 1) {
+    if (setornome == "Relações Humanas") {
       errin1 = 'Erro no cadastro de novos funcionários'
       errin2 = 'Erro na expedição de folha de pagamento'
-    } else if (setorid == 2) {
+    } else if (setornome == "Tecnologia") {
       errin1 = 'Sistema não abre'
       errin2 = 'Sistema não se conecta à base de dados'
-    } else if (setorid == 3) {
+    } else if (setornome == "Serviços Gerais") {
       errin1 = 'A página de pedidos está incompleta'
       errin2 = 'Os pedidos realizados não estão chegando ao setor de compras'
-    } else if (setorid == 4) {
+    } else if (setornome == "Vendas") {
       errin1 = 'Não está sendo possível atualizar a página de um produto'
       errin2 = 'A opção de pagamento com cartão não está funcionando'
-    } else if (setorid == 5) {
+    } else if (setornome == "Almoxarifado") {
       errin1 = 'Não está sendo possível remover um produto da base de dados'
       errin2 = 'Há produtos duplicados na listagem'
     }
-    this.setState({ setorSlc: e.target.value, erro1: errin1, erro2: errin2 })
+    this.setState({ setorSlc: e.target.value, erro1: errin1, erro2: errin2, setorSlcNome: setornome })
   }
 
   render() {
@@ -115,13 +117,13 @@ export default class Main extends Component {
             <select className="browser-default custom-select" style={{ marginTop: 20 }} onChange={(event => this.setState({ empresaSlc: event.target.value }) + console.log(this.state.empresaSlc))}>{/* React select no futuro */}
               <option selected disabled>Empresas</option>
               {this.state.listaEmpresa.map(empresa =>
-                <option key={empresa.id} >{empresa.nome}</option>
+                <option key={empresa.id} label={empresa.nome} value={empresa.nome} onChange={(event => this.setState({ empresaSlcNome: event.target.value }) + console.log(this.state.empresaSlcNome))}></option>
               )}
             </select>
             <select className="browser-default custom-select" style={{ marginTop: 20 }} onChange={(event => this.criarListaErros(event))}>{/* + console.log(this.state.setorSlc) */}
               <option selected disabled>Setores</option>
               {this.state.listaSetores.map(setores =>
-                <option key={setores.id} value={setores.id}>{setores.nome}</option>
+                <option key={setores.id} value={setores.nome}>{setores.nome}</option>
               )}
             </select>
             <select className="browser-default custom-select" style={{ marginTop: 20 }}>
