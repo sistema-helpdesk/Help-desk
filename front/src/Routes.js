@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 import Sidebar from './sidebar/Sidebar';
 import Main from './telas/Main';
 import MainTabela from './telas/lista/MainTabela';

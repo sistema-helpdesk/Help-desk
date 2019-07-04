@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { MDBTable, MDBTableHead, MDBTableBody, MDBCollapse, MDBBtn, MDBInput } from 'mdbreact';
-import Chamado from '../chamado/Chamado';
 import axios from 'axios';
 
 
@@ -18,6 +17,8 @@ export default class Tabela extends Component {
       listaChamada: [],
       idAtual: null,
       erroAtual: null,
+      empresaAtual:null,
+      setorAtual:null,
       statusAtual: 'Concluido'
     }
   }
@@ -43,20 +44,27 @@ export default class Tabela extends Component {
 
 
   chamadoEditar() {
-    axios.put('http://localhost:8080/chamados/' + this.state.idAtual, {
-      id: this.state.idAtual,
-      solucao: this.state.solucao,
-      erro: this.state.erroAtual,
-      descricao: this.state.descricaoAtual,
-      status: this.state.statusAtual
-      // aluno:[{id:1}]
-    }).then(res => {
-      window.location.reload();
-    })
-    console.log(this.state.solucao)
+    if( !this.state.solucao ){
+      alert('Preencha uma solução!')
+    } else{
+      axios.put('http://localhost:8080/chamados/' + this.state.idAtual, {
+        id: this.state.idAtual,
+        nEmpresa: this.state.empresaAtual,
+        nSetor: this.state.setorAtual,
+        solucao: this.state.solucao,
+        erro: this.state.erroAtual,
+        descricao: this.state.descricaoAtual,
+        status: this.state.statusAtual
+        // aluno:[{id:1}]
+      }).then(res => {
+        window.location.reload();
+      })
+      console.log(this.state.solucao)
+
+    }
   }
 
-  toggleCollapse(idzin, descr, solu, err, stat) {
+  toggleCollapse(idzin, descr, solu, err, stat, empr, set) {
     let colapsado = ''
     if (this.state.collapseID === false) {
       colapsado = true
@@ -64,7 +72,7 @@ export default class Tabela extends Component {
       colapsado = false
     }
     // console.log(this.state.listaChamada[1])
-    this.setState({ collapseID: colapsado, idAtual: idzin, descricaoAtual: descr, solucaoAtual: solu, erroAtual: err, status: stat })
+    this.setState({ collapseID: colapsado, idAtual: idzin, descricaoAtual: descr, solucaoAtual: solu, erroAtual: err, status: stat, empresaAtual: empr, setorAtual: set })
   };
 
   render() {
@@ -74,7 +82,9 @@ export default class Tabela extends Component {
           <MDBTableHead>
             <tr>
               <th>ID</th>
-              <th>Descrição / Solução</th>
+              <th>Empresa</th>
+              <th>Setor</th>
+              <th className='alinhandoCentro'>Descrição / Solução</th>
               <th>Situação</th>
               {/* <th>Responsável</th> */}
             </tr>
@@ -83,7 +93,9 @@ export default class Tabela extends Component {
             {this.state.listaChamada.map(chamados =>
               <tr key={chamados.id}>
                 <th>{chamados.id}</th>
-                <th><button onClick={() => this.toggleCollapse(chamados.id, chamados.descricao, chamados.solucao, chamados.erro, chamados.status)} >Ver</button></th>
+                <th>{chamados.nEmpresa}</th>
+                <th>{chamados.nSetor}</th>
+                <th className='alinhandoCentro'><button onClick={() => this.toggleCollapse(chamados.id, chamados.descricao, chamados.solucao, chamados.erro, chamados.status, chamados.nEmpresa, chamados.nSetor)} >Ver</button></th>
                 <th>{chamados.status}</th>
               </tr>
             )}

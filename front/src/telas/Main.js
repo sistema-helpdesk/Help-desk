@@ -9,13 +9,13 @@ export default class Main extends Component {
       listaEmpresa: [],
       listaSetores: [],
       listaErrosExibida: [],
-      empresaSlcNome: '',
-      setorSlc: 'Tecnologia',
       erro: '',
       erro1: '',
       erro2: '',
       descricao: '',
+      empresaSlcNome: '',
       setorSlcNome: '',
+      erroAtual:''
     }
   }
   componentDidMount() {
@@ -63,17 +63,23 @@ export default class Main extends Component {
     // let emprezin = [
     //   '{"id":1}'
     // ]
-    if (!this.state.descricao) {
-      this.setState({ erro: "Preencha nome da turma para continuar!" });
+    if (!this.state.descricao | !this.state.setorSlcNome | !this.state.empresaSlcNome | !this.state.erroAtual) {
+      alert('Preencha e selecione todos os campos!');
     } else {
       axios.post('http://localhost:8080/chamados', {
         id: null,
-        erro: null,
+        erro: this.state.erroAtual,
         descricao: this.state.descricao,
         status: 'Em andamento',
         solucao: null,
         nEmpresa: this.state.empresaSlcNome,
-        nSetor: this.state.setorSlcNome
+        nSetor: this.state.setorSlcNome,
+        empresa: {
+          "id": 1
+        },
+        setor: {
+          "id": 1
+        }//resolvido problema com ligações!
       }).then(resposta => {
         //se deu certo:
         alert('Cadastrado com sucesso!');
@@ -105,7 +111,7 @@ export default class Main extends Component {
       errin1 = 'Não está sendo possível remover um produto da base de dados'
       errin2 = 'Há produtos duplicados na listagem'
     }
-    this.setState({ setorSlc: e.target.value, erro1: errin1, erro2: errin2, setorSlcNome: setornome })
+    this.setState({ erro1: errin1, erro2: errin2, setorSlcNome: setornome })
   }
 
   render() {
@@ -114,22 +120,23 @@ export default class Main extends Component {
         <div className='row'>
           <div className='col-sm-1'></div>
           <div className='col-sm-10 alinhandoEsquerda z-depth-3'>
-            <select className="browser-default custom-select" style={{ marginTop: 20 }} onChange={(event => this.setState({ empresaSlc: event.target.value }) + console.log(this.state.empresaSlc))}>{/* React select no futuro */}
-              <option selected disabled>Empresas</option>
+            <select className="browser-default custom-select" defaultValue='n/declarado' style={{ marginTop: 20 }} onChange={(event => this.setState({ empresaSlcNome: event.target.value }) + console.log(this.state.empresaSlcNome))}>{/* React select no futuro */}
+              <option value='n/declarado' disabled>Empresas</option>
               {this.state.listaEmpresa.map(empresa =>
-                <option key={empresa.id} label={empresa.nome} value={empresa.nome} onChange={(event => this.setState({ empresaSlcNome: event.target.value }) + console.log(this.state.empresaSlcNome))}></option>
+                <option key={empresa.id} label={empresa.nome} value={empresa.nome}></option>
               )}
             </select>
-            <select className="browser-default custom-select" style={{ marginTop: 20 }} onChange={(event => this.criarListaErros(event))}>{/* + console.log(this.state.setorSlc) */}
-              <option selected disabled>Setores</option>
+            <select className="browser-default custom-select" defaultValue='n/declarado' style={{ marginTop: 20 }} onChange={(event => this.criarListaErros(event))}>{/* + console.log(this.state.setorSlc) */}
+              <option value='n/declarado' disabled>Setores</option>
               {this.state.listaSetores.map(setores =>
                 <option key={setores.id} value={setores.nome}>{setores.nome}</option>
               )}
             </select>
-            <select className="browser-default custom-select" style={{ marginTop: 20 }}>
+            <select className="browser-default custom-select" defaultValue='n/declarado' style={{ marginTop: 20 }} onChange={(event => this.setState({ erroAtual: event.target.value }) + console.log(this.state.erroAtual))}>
               {/* {this.state.listaSetores.map(setores =>
                 <option key={setores.id}>{setores.erro1}</option>
               )} */}
+              <option value='n/declarado' disabled>Erros</option>
               <option>{this.state.erro1}</option>
               <option>{this.state.erro2}</option>
             </select>
