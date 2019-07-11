@@ -13,9 +13,9 @@ export default class Main extends Component {
       erro1: '',
       erro2: '',
       descricao: '',
-      empresaSlcNome: '',
-      setorSlcNome: '',
-      erroAtual:''
+      empresaSlcId: '',
+      setorSlcId: '',
+      erroAtual: ''
     }
   }
   componentDidMount() {
@@ -63,7 +63,7 @@ export default class Main extends Component {
     // let emprezin = [
     //   '{"id":1}'
     // ]
-    if (!this.state.descricao | !this.state.setorSlcNome | !this.state.empresaSlcNome | !this.state.erroAtual) {
+    if (!this.state.descricao | !this.state.setorSlcId | !this.state.empresaSlcId | !this.state.erroAtual) {
       alert('Preencha e selecione todos os campos!');
     } else {
       axios.post('http://localhost:8080/chamados', {
@@ -72,13 +72,13 @@ export default class Main extends Component {
         descricao: this.state.descricao,
         status: 'Em andamento',
         solucao: null,
-        nEmpresa: this.state.empresaSlcNome,
-        nSetor: this.state.setorSlcNome,
+        nEmpresa: this.state.empresaSlcId,
+        nSetor: this.state.setorSlcId,
         empresa: {
-          "id": 1
+          "id": this.state.empresaSlcId
         },
         setor: {
-          "id": 1
+          "id": this.state.setorSlcId
         }//resolvido problema com ligações!
       }).then(resposta => {
         //se deu certo:
@@ -92,26 +92,29 @@ export default class Main extends Component {
   }
 
   criarListaErros(e) {
-    let setornome = e.target.value;
+    let setorId = e.target.value;
     let errin1 = null;
     let errin2 = null;
-    if (setornome == "Relações Humanas") {
-      errin1 = 'Erro no cadastro de novos funcionários'
-      errin2 = 'Erro na expedição de folha de pagamento'
-    } else if (setornome == "Tecnologia") {
-      errin1 = 'Sistema não abre'
-      errin2 = 'Sistema não se conecta à base de dados'
-    } else if (setornome == "Serviços Gerais") {
-      errin1 = 'A página de pedidos está incompleta'
-      errin2 = 'Os pedidos realizados não estão chegando ao setor de compras'
-    } else if (setornome == "Vendas") {
-      errin1 = 'Não está sendo possível atualizar a página de um produto'
-      errin2 = 'A opção de pagamento com cartão não está funcionando'
-    } else if (setornome == "Almoxarifado") {
-      errin1 = 'Não está sendo possível remover um produto da base de dados'
-      errin2 = 'Há produtos duplicados na listagem'
-    }
-    this.setState({ erro1: errin1, erro2: errin2, setorSlcNome: setornome })
+    // if (setorId == 1) {
+    //   errin1 = 'Erro no cadastro de novos funcionários'
+    //   errin2 = 'Erro na expedição de folha de pagamento'
+    // } else if (setorId == 2) {
+    //   errin1 = 'Sistema não abre'
+    //   errin2 = 'Sistema não se conecta à base de dados'
+    // } else if (setorId == 3) {
+    //   errin1 = 'A página de pedidos está incompleta'
+    //   errin2 = 'Os pedidos realizados não estão chegando ao setor de compras'
+    // } else if (setorId == 4) {
+    //   errin1 = 'Não está sendo possível atualizar a página de um produto'
+    //   errin2 = 'A opção de pagamento com cartão não está funcionando'
+    // } else if (setorId == 5) {
+    //   errin1 = 'Não está sendo possível remover um produto da base de dados'
+    //   errin2 = 'Há produtos duplicados na listagem'
+    // }
+    errin1 = this.state.listaSetores[setorId - 1].erro1;
+    errin2 = this.state.listaSetores[setorId - 1].erro2;
+
+    this.setState({ erro1: errin1, erro2: errin2, setorSlcId: setorId })
   }
 
   render() {
@@ -120,16 +123,16 @@ export default class Main extends Component {
         <div className='row'>
           <div className='col-sm-1'></div>
           <div className='col-sm-10 alinhandoEsquerda z-depth-3'>
-            <select className="browser-default custom-select" defaultValue='n/declarado' style={{ marginTop: 20 }} onChange={(event => this.setState({ empresaSlcNome: event.target.value }) + console.log(this.state.empresaSlcNome))}>{/* React select no futuro */}
+            <select className="browser-default custom-select" defaultValue='n/declarado' style={{ marginTop: 20 }} onChange={(event => this.setState({ empresaSlcId: event.target.value }) + console.log(event.target.value))}>{/* React select no futuro */}
               <option value='n/declarado' disabled>Empresas</option>
               {this.state.listaEmpresa.map(empresa =>
-                <option key={empresa.id} label={empresa.nome} value={empresa.nome}></option>
+                <option key={empresa.id} label={empresa.nome} value={empresa.id}></option>
               )}
             </select>
             <select className="browser-default custom-select" defaultValue='n/declarado' style={{ marginTop: 20 }} onChange={(event => this.criarListaErros(event))}>{/* + console.log(this.state.setorSlc) */}
               <option value='n/declarado' disabled>Setores</option>
               {this.state.listaSetores.map(setores =>
-                <option key={setores.id} value={setores.nome}>{setores.nome}</option>
+                <option key={setores.id} value={setores.id}>{setores.nome}</option>
               )}
             </select>
             <select className="browser-default custom-select" defaultValue='n/declarado' style={{ marginTop: 20 }} onChange={(event => this.setState({ erroAtual: event.target.value }) + console.log(this.state.erroAtual))}>

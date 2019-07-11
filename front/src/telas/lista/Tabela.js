@@ -17,12 +17,14 @@ export default class Tabela extends Component {
       solucaoAtual: '',
       solucao: '',
       listaChamada: [],
+      listaRespo:[],
       idAtual: null,
       erroAtual: null,
       empresaAtual: null,
       setorAtual: null,
       statusAtual: 'Concluido',
-      listaSetores: []
+      listaSetores: [],
+      num1: 1
     }
   }
 
@@ -37,7 +39,7 @@ export default class Tabela extends Component {
         // });
         // console.log(data)
         this.setState({ listaChamada: data })
-        console.log(this.state.listaChamada)
+        console.log(resposta.data.length)
       })
       .catch(resposta => {
         //se deu errado:
@@ -122,12 +124,12 @@ export default class Tabela extends Component {
             {this.state.listaChamada.map(chamados =>
               <tr key={chamados.id}>
                 <th>{chamados.id}</th>
-                <th>{chamados.nEmpresa}</th>
-                <th>{chamados.nSetor}</th>
+                <th>{chamados.empresa.nome}</th>
+                <th>{chamados.setor.nome}</th>
                 <th className='alinhandoCentro'><button onClick={() => this.setState({ descricaoVista: chamados.descricao, solucaoVista: chamados.solucao===null ? "" : chamados.solucao })} >Ver</button></th>
-                <th className='alinhandoCentro'><button onClick={() => this.toggleCollapse(chamados.id, chamados.descricao, chamados.solucao, chamados.erro, chamados.status, chamados.nEmpresa, chamados.nSetor)} >Editar</button></th>
+                <th className='alinhandoCentro'><button onClick={() => this.toggleCollapse(chamados.id, chamados.descricao, chamados.solucao, chamados.erro, chamados.status, chamados.empresa.nome, chamados.setor.nome)} >Editar</button></th>
                 <th>{chamados.status}</th>
-                <th>respo</th>
+                <th>{chamados.setor.responsavel}</th>
                 {/* {chamados.setor} */}
               </tr>
             )}
