@@ -39,7 +39,7 @@ export default class Tabela extends Component {
         // });
         // console.log(data)
         this.setState({ listaChamada: data })
-        console.log(resposta.data.length)
+        console.log(resposta)
       })
       .catch(resposta => {
         //se deu errado:
@@ -72,8 +72,12 @@ export default class Tabela extends Component {
     } else {
       axios.put('http://localhost:8080/chamados/' + this.state.idAtual, {
         id: this.state.idAtual,
-        nEmpresa: this.state.empresaAtual,
-        nSetor: this.state.setorAtual,
+        empresa: {
+            "id": this.state.empresaAtual,
+        },
+        setor: {
+          "id": this.state.setorAtual,
+        },
         solucao: this.state.solucao,
         erro: this.state.erroAtual,
         descricao: this.state.descricaoAtual,
@@ -127,7 +131,7 @@ export default class Tabela extends Component {
                 <th>{chamados.empresa.nome}</th>
                 <th>{chamados.setor.nome}</th>
                 <th className='alinhandoCentro'><button onClick={() => this.setState({ descricaoVista: chamados.descricao, solucaoVista: chamados.solucao===null ? "" : chamados.solucao })} >Ver</button></th>
-                <th className='alinhandoCentro'><button onClick={() => this.toggleCollapse(chamados.id, chamados.descricao, chamados.solucao, chamados.erro, chamados.status, chamados.empresa.nome, chamados.setor.nome)} >Editar</button></th>
+                <th className='alinhandoCentro'><button onClick={() => this.toggleCollapse(chamados.id, chamados.descricao, chamados.solucao, chamados.erro, chamados.status, chamados.empresa.id, chamados.setor.id)} >Editar</button></th>
                 <th>{chamados.status}</th>
                 <th>{chamados.setor.responsavel}</th>
                 {/* {chamados.setor} */}
