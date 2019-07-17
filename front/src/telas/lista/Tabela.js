@@ -17,9 +17,11 @@ export default class Tabela extends Component {
       solucaoAtual: '',
       solucao: '',
       listaChamada: [],
-      listaRespo:[],
+      listaRespo: [],
       idAtual: null,
       erroAtual: null,
+      tipoAtual: null,
+      tipoAntigo:null,
       empresaAtual: null,
       setorAtual: null,
       statusAtual: 'Concluido',
@@ -46,23 +48,23 @@ export default class Tabela extends Component {
         alert('Deu errado!')
         console.log(resposta)
       })
-      axios.get('http://localhost:8080/setores')
-        .then(resposta => {
-          let data = null
-          //se deu certo:
-          data = resposta.data
-          // data.map(linha => {
-  
-          // });
-          // console.log(data)
-          this.setState({ listaSetores: data })
-          console.log(this.state.listaSetores)
-        })
-        .catch(resposta => {
-          //se deu errado:
-          alert('Deu errado!')
-          console.log(resposta)
-        })
+    axios.get('http://localhost:8080/setores')
+      .then(resposta => {
+        let data = null
+        //se deu certo:
+        data = resposta.data
+        // data.map(linha => {
+
+        // });
+        // console.log(data)
+        this.setState({ listaSetores: data })
+        console.log(this.state.listaSetores)
+      })
+      .catch(resposta => {
+        //se deu errado:
+        alert('Deu errado!')
+        console.log(resposta)
+      })
   }
 
 
@@ -73,11 +75,12 @@ export default class Tabela extends Component {
       axios.put('http://localhost:8080/chamados/' + this.state.idAtual, {
         id: this.state.idAtual,
         empresa: {
-            "id": this.state.empresaAtual,
+          "id": this.state.empresaAtual,
         },
         setor: {
           "id": this.state.setorAtual,
         },
+        tipo: this.state.tipoAtual,
         solucao: this.state.solucao,
         erro: this.state.erroAtual,
         descricao: this.state.descricaoAtual,
@@ -91,7 +94,7 @@ export default class Tabela extends Component {
     }
   }
 
-  toggleCollapse(idzin, descr, solu, err, stat, empr, set) {
+  toggleCollapse(idzin, descr, solu, err, stat, empr, set, tipo) {
     let colapsado = ''
     // let solucaoTemp = ''
     if (this.state.collapseID === false) {
@@ -106,7 +109,7 @@ export default class Tabela extends Component {
     //   solucaoTemp = 'Solução atual: ' + solu
     // }
     // console.log(this.state.listaChamada[1])
-    this.setState({ collapseID: colapsado, idAtual: idzin, descricaoAtual: descr, solucaoAtual: solu, erroAtual: err, status: stat, empresaAtual: empr, setorAtual: set })
+    this.setState({ collapseID: colapsado, idAtual: idzin, descricaoAtual: descr, solucaoAtual: solu, erroAtual: err, status: stat, empresaAtual: empr, setorAtual: set, tipoAtual: tipo, tipoAntigo: tipo })
   };
 
   render() {
@@ -130,8 +133,8 @@ export default class Tabela extends Component {
                 <th>{chamados.id}</th>
                 <th>{chamados.empresa.nome}</th>
                 <th>{chamados.setor.nome}</th>
-                <th className='alinhandoCentro'><button onClick={() => this.setState({ descricaoVista: chamados.descricao, solucaoVista: chamados.solucao===null ? "" : chamados.solucao })} >Ver</button></th>
-                <th className='alinhandoCentro'><button onClick={() => this.toggleCollapse(chamados.id, chamados.descricao, chamados.solucao, chamados.erro, chamados.status, chamados.empresa.id, chamados.setor.id)} >Editar</button></th>
+                <th className='alinhandoCentro'><button onClick={() => this.setState({ descricaoVista: chamados.descricao, solucaoVista: chamados.solucao === null ? "" : chamados.solucao })} >Ver</button></th>
+                <th className='alinhandoCentro'><button onClick={() => this.toggleCollapse(chamados.id, chamados.descricao, chamados.solucao, chamados.erro, chamados.status, chamados.empresa.id, chamados.setor.id, chamados.tipo)} >Editar</button></th>
                 <th>{chamados.status}</th>
                 <th>{chamados.setor.responsavel}</th>
                 {/* {chamados.setor} */}
@@ -139,13 +142,23 @@ export default class Tabela extends Component {
             )}
           </MDBTableBody>
         </MDBTable>
-        <MDBCollapse isOpen={this.state.collapseID} style={{paddingBottom:30}}>
+        <MDBCollapse isOpen={this.state.collapseID} style={{ paddingBottom: 30 }}>
 
           {/* {this.state.erro && <div className="alert alert-danger">{this.state.erro}</div>} */}
           {/* <MDBInput type="textarea" label="Empresa" rows="1" value={this.state.empresa} disabled></MDBInput>
           <MDBInput type="textarea" label="Setor" rows="1" value={this.state.setor} disabled></MDBInput> */}
           <MDBInput type="textarea" label="Descrição" rows="5" value={this.state.descricaoAtual} disabled></MDBInput>
           <MDBInput type="textarea" label="Solução" rows="5" onChange={(event => this.setState({ solucao: event.target.value }))} ></MDBInput>
+          <label>Tipo do Chamado: {this.state.tipoAntigo}</label>
+          <select className="browser-default custom-select" defaultValue='n/declarado' style={{ marginBottom: 20 }} onChange={(event => this.setState({ tipoAtual: event.target.value }) + console.log(event.target.value))}>
+            {/* {this.state.listaSetores.map(setores =>
+                <option key={setores.id}>{setores.erro1}</option>
+              )} */}
+            <option value='n/declarado' disabled>Selecione o tipo de manutenção</option>
+            <option value='Adaptativo'>Adaptativo</option>
+            <option value='Corretivo'>Corretivo</option>
+            <option value='Evolutivo'>Evolutivo</option>
+          </select>
           {/* <p className='blue-text'>{this.state.solucaoAtual}</p> */}
           <MDBBtn color="primary" onClick={() => this.chamadoEditar()}>Salvar</MDBBtn>
         </MDBCollapse>
