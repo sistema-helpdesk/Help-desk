@@ -24,6 +24,7 @@ public class Chamado  implements Serializable {
 	private String solucao;
 	private String nEmpresa;
 	private String nSetor;
+	private String Tipo;
 
 //	@JsonIgnore
 	@ManyToOne
@@ -39,7 +40,7 @@ public class Chamado  implements Serializable {
 	}
 	
 	public Chamado(Integer id, String erro, String descricao, String status, String solucao, String nEmpresa,
-			String nSetor, Empresa empresa, Setor setor) {
+			String nSetor, String tipo, Empresa empresa, Setor setor) {
 		super();
 		this.id = id;
 		this.erro = erro;
@@ -48,6 +49,7 @@ public class Chamado  implements Serializable {
 		this.solucao = solucao;
 		this.nEmpresa = nEmpresa;
 		this.nSetor = nSetor;
+		this.Tipo = tipo;
 		this.empresa = empresa;
 		this.setor = setor;
 	}
@@ -106,6 +108,14 @@ public class Chamado  implements Serializable {
 
 	public void setSolucao(String solucao) {
 		this.solucao = solucao;
+	}
+
+	public String getTipo() {
+		return Tipo;
+	}
+
+	public void setTipo(String tipo) {
+		Tipo = tipo;
 	}
 
 	public Empresa getEmpresa() {

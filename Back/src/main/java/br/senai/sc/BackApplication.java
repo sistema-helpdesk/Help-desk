@@ -43,8 +43,8 @@ public class BackApplication implements CommandLineRunner {
 		Setor setor4 = new Setor(null, "Vendas", "Não está sendo possível atualizar a página de um produto", "A opção de pagamento com cartão não está funcionando", "Cláudio");
 		Setor setor5 = new Setor(null, "Almoxarifado", "Não está sendo possível remover um produto da base de dados", "Há produtos duplicados na listagem", "Marcelo");
 		
-		Chamado chamado1 = new Chamado(null, setor1.getErro1(), "O sistema é horrível. Eu exijo uma atualização geral e total. dá um jeito! Não aguento mais! Não consigo cadastrar novos funcionários.", "Em andamento", null, empresa1.getNome(), setor1.getNome(), empresa1, setor1);
-		Chamado chamado2 = new Chamado(null, setor2.getErro1(), "O sistema é bom demais. Eu amo trabalhar com ele. Me sinto realizado. Porém, há uma pequena falha: Ele não está abrindo.", "Em andamento", null, empresa2.getNome(), setor2.getNome(), empresa2, setor2);
+		Chamado chamado1 = new Chamado(null, setor1.getErro1(), "O sistema é horrível. Eu exijo uma atualização geral e total. dá um jeito! Não aguento mais! Não consigo cadastrar novos funcionários.", "Em andamento", null, empresa1.getNome(), setor1.getNome(), "Corretiva",empresa1, setor1);
+		Chamado chamado2 = new Chamado(null, setor2.getErro1(), "O sistema é bom demais. Eu amo trabalhar com ele. Me sinto realizado. Porém, há uma pequena falha: Ele não está abrindo.", "Em andamento", null, empresa2.getNome(), setor2.getNome(), "Corretiva",empresa2, setor2);
 
 		empresaR.save(empresa1);
 		empresaR.save(empresa2);
